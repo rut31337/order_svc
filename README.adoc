@@ -4,18 +4,29 @@
 
 Order Red Hat CloudForms (or ManageIQ) services in bulk via the API.  You must provide a catalog name and catalog item (in text format).
 
+=== Username
+
 If you do not provide a user name, you will be prompted for one.  
+
+=== Total Requests
 
 Total requests specifies the amount of services you wish to order in total.
 
+=== Group Count and Wait 
 Group count allows you to break up the orders into groups equaling the number of services specified.
 
 Group wait will pause ordering between groups.
 
+=== API Wait
+
 Api wait specifies a quick pause between API calls in the same group.
+
+=== URI
 
 Uri is the URI of your CloudForms/ManageIQ appliance.
 
+== Usage
+
 ----
-Usage $0 -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> ]
+# order_svc.sh -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> ]
 ----
