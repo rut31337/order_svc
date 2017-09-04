@@ -1,0 +1,4 @@
+
+----
+Usage $0 -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> ]
+----
