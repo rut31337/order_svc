@@ -4,9 +4,9 @@
 
 # Defaults
 uri="https://cf.example.com"
-totalRequests=75 # Total number of requests
-groupCount=10 # Number to order at one time
-groupWait=5 # Minutes between groups
+totalRequests=10 # Total number of requests
+groupCount=5 # Number to order at one time
+groupWait=1 # Minutes between groups
 apiWait=3 # Seconds between API calls in a group
 
 # Dont touch from here on
