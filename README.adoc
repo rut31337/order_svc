@@ -10,23 +10,33 @@ If you do not provide a user name, you will be prompted for one.
 
 === Total Requests
 
-Total requests specifies the amount of services you wish to order in total.
+-t <n> - Total requests specifies the amount of services you wish to order in total.
 
 === Group Count and Wait 
-Group count allows you to break up the orders into groups equaling the number of services specified.
 
-Group wait will pause ordering between groups.
+-g <n> - Group count allows you to break up the orders into groups equaling the number of services specified.
+
+-p <n> - Group wait will pause ordering between groups.
 
 === API Wait
 
-Api wait specifies a quick pause between API calls in the same group.
+-a <n> - Api wait specifies a quick pause between API calls in the same group.
 
 === URI
 
-Uri is the URI of your CloudForms/ManageIQ appliance.
+-w <n> - Uri is the URI of your CloudForms/ManageIQ appliance.
+
+=== Keypairs
+
+-d <key1=value1;key2=value2...> - Using the this flag you can specify keypairs to fill out the dialog (if any) in the order form.  They are semicolon delimited key value pairs and the key must equal the "Name" value in the service dialog.
+
+
+=== Non-Interactive
+
+Use -n if you don't want to be prompted if you are sure you wish to continue.  *Use at your own risk!*
 
 == Usage
 
 ----
-# order_svc.sh -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> ]
+# order_svc.sh -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value1;key2=value2...> -n ]
 ----
