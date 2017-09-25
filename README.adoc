@@ -35,8 +35,19 @@ If you do not provide a user name, you will be prompted for one.
 
 Use -n if you don't want to be prompted if you are sure you wish to continue.  *Use at your own risk!*
 
-== Usage
+=== Usage
 
 ----
 # order_svc.sh -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value1;key2=value2...> -n ]
+----
+
+
+== get_svcs.sh
+
+Get a list of your ordered services (to get GUIDs)
+
+=== Usage
+
+----
+# get_svcs.sh -i <item name> -u <username> [ -w <uri> ]
 ----

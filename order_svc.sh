@@ -1,5 +1,7 @@
 #!/bin/bash
 
+IFS=";"
+
 # CloudForms OrderGanza - Patrick Rutledge prutledg@redhat.com
 
 # Defaults
@@ -71,7 +73,6 @@ fi
 KPS=""
 if [ -n "$keypairs" ]
 then
-  IFS=";"
   for kp in $keypairs
   do
     k=`echo $kp|cut -f1 -d=`
@@ -92,7 +93,7 @@ do
   while [ $c -le $groupCount -a $t -le $totalRequests ]
   do
     echo "Deploying request $t in group $g"
-    curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD" | python -m json.tool
+    out=`curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD" | python -m json.tool`
     (( c = $c + 1 ))
     (( t = $t + 1 ))
     sleep $apiWait
