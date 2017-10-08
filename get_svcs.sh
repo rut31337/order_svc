@@ -4,28 +4,25 @@
 
 # Defaults
 uri="https://cf.example.com"
-totalRequests=10 # Total number of requests
-groupCount=5 # Number to order at one time
-groupWait=1 # Minutes between groups
-apiWait=3 # Seconds between API calls in a group
 
 # Dont touch from here on
 
 usage() {
-  echo "Error: Usage $0 -i <item name> -u <username> [ -w <uri> ]"
+  echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> ]"
 }
 
-while getopts nu:c:i:t:g:p:a:w:d: FLAG; do
+while getopts u:c:i:w:o: FLAG; do
   case $FLAG in
-    n) noni=1;;
     u) username="$OPTARG";;
+    c) catalogName="$OPTARG";;
     i) itemName="$OPTARG";;
     w) uri="$OPTARG";;
+    o) outfile="$OPTARG";;
     *) usage;exit;;
     esac
 done
 
-if [ -z "$itemName" ]
+if [ -z "$catalogName" -o -z "$itemName" -o -z "$outfile" ]
 then
   usage
   exit 1
@@ -44,8 +41,14 @@ echo
 
 
 tok=`curl -s --user $username:$password -X GET -H "Accept: application/json" $uri/api/auth|python -m json.tool|grep auth_token|cut -f4 -d\"`
-#echo "tok is $tok"
-itemName=`echo $itemName|sed "s/ /_/g"`
-itemName=`echo $itemName|cut -c1-30`
 
-curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET $uri/api/services?attributes=name\&expand=resources|python -m json.tool|grep '"name"'|cut -f2 -d:|grep $itemName|grep $username|sed -e 's/[ |"]//g'
+
+catalogName=`echo $catalogName|sed "s/ /+/g"`
+itemName=`echo $itemName|sed "s/ /+/g"`
+catalogID=`curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name%3D$catalogName" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+echo "catalogID is $catalogID"
+itemID=`curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name=$itemName&filter%5B%5D=service_template_catalog_id%3D$catalogID" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+echo "itemID is $itemID"
+
+
+curl -s -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET $uri/api/services?attributes=name\&expand=resources\&filter%5B%5D=service_template_id%3D$itemID|python -m json.tool|grep '"name"'|grep $username|cut -f2 -d:|sed -e 's/[ |"]//g' > $outfile

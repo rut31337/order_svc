@@ -49,5 +49,5 @@ Get a list of your ordered services (to get GUIDs)
 === Usage
 
 ----
-# get_svcs.sh -i <item name> -u <username> [ -w <uri> ]
+# get_svcs.sh -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> ]
 ----
