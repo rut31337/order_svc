@@ -6,7 +6,11 @@ Order Red Hat CloudForms (or ManageIQ) services in bulk via the API.  You must p
 
 === Username
 
-If you do not provide a user name, you will be prompted for one.  
+-u <text> If you do not provide a user name, you will be prompted for one.  
+
+=== Password
+
+-P <text> If you do not provide a password, you will be prompted for one.  
 
 === Total Requests
 
