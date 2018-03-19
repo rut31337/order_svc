@@ -42,7 +42,7 @@ Use -n if you don't want to be prompted if you are sure you wish to continue.  *
 === Usage
 
 ----
-# order_svc.sh -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value1;key2=value2...> -n ]
+# order_svc.sh -c <catalog name> -i <item name> [ -u <username> -P <password> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value1;key2=value2...> -n ]
 ----
 
 
