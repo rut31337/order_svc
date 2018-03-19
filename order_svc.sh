@@ -14,13 +14,14 @@ apiWait=3 # Seconds between API calls in a group
 # Dont touch from here on
 
 usage() {
-  echo "Error: Usage $0 -c <catalog name> -i <item name> [ -u <username> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value;key2=value> -n ]"
+  echo "Error: Usage $0 -c <catalog name> -i <item name> [ -u <username> -P <password> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value;key2=value> -n ]"
 }
 
-while getopts nu:c:i:t:g:p:a:w:d: FLAG; do
+while getopts nu:P:c:i:t:g:p:a:w:d: FLAG; do
   case $FLAG in
     n) noni=1;;
     u) username="$OPTARG";;
+    P) password="$OPTARG";;
     c) catalogName="$OPTARG";;
     i) itemName="$OPTARG";;
     t) totalRequests="$OPTARG";;
@@ -44,12 +45,14 @@ then
   echo -n "Enter CF Username: ";read username
 fi
 
-echo -n "Enter CF Password: "
-stty -echo
-read password
-stty echo
-echo
-
+if [ -z "$password" ]
+then
+  echo -n "Enter CF Password: "
+  stty -echo
+  read password
+  stty echo
+  echo
+fi
 
 tok=`curl -s --user $username:$password -X GET -H "Accept: application/json" $uri/api/auth|python -m json.tool|grep auth_token|cut -f4 -d\"`
 #echo "tok is $tok"
