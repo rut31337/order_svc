@@ -30,6 +30,10 @@ Order Red Hat CloudForms (or ManageIQ) services in bulk via the API.  You must p
 
 -w <n> - Uri is the URI of your CloudForms/ManageIQ appliance.
 
+=== Insecure SSL
+
+-N allow insecure SSL.
+
 === Keypairs
 
 -d <key1=value1;key2=value2...> - Using the this flag you can specify keypairs to fill out the dialog (if any) in the order form.  They are semicolon delimited key value pairs and the key must equal the "Name" value in the service dialog.
