@@ -8,11 +8,12 @@ uri="https://cf.example.com"
 # Dont touch from here on
 
 usage() {
-  echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> [ -P <password> -w <uri> -N ]"
+  echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> [ -P <password> -w <uri> -n -N ]"
 }
 
-while getopts u:P:c:i:w: FLAG; do
+while getopts n:u:P:c:i:w: FLAG; do
   case $FLAG in
+    n) noni=1;;
     N) insecure=1;;
     u) username="$OPTARG";;
     P) password="$OPTARG";;
@@ -60,6 +61,16 @@ itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json"
 echo "itemID is $itemID"
 
 svcs=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET $uri/api/services?attributes=href\&expand=resources\&filter%5B%5D=service_template_id%3D$itemID|python -m json.tool |grep '"href"'|grep "services/"|cut -f2- -d:|sed -e 's/[ |"|,]//g'`
+
+if [ "$noni" != 1 ]
+then
+  echo -n "Are you sure you wish to deploy $totalRequests instances of this catalog item? (y/N): ";read yn
+  if [ "$yn" != "y" ]
+  then
+    echo "Exiting."
+    exit
+  fi
+fi
 
 PAYLOAD="{ \"action\": \"retire\" }"
 

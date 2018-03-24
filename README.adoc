@@ -38,7 +38,6 @@ Order Red Hat CloudForms (or ManageIQ) services in bulk via the API.  You must p
 
 -d <key1=value1;key2=value2...> - Using the this flag you can specify keypairs to fill out the dialog (if any) in the order form.  They are semicolon delimited key value pairs and the key must equal the "Name" value in the service dialog.
 
-
 === Non-Interactive
 
 Use -n if you don't want to be prompted if you are sure you wish to continue.  *Use at your own risk!*
@@ -48,7 +47,6 @@ Use -n if you don't want to be prompted if you are sure you wish to continue.  *
 ----
 # order_svc.sh -c <catalog name> -i <item name> [ -u <username> -P <password> -t <totalRequests> -g <groupCount> -p <groupWait> -a <apiWait> -w <uri> -d <key1=value1;key2=value2...> -n ]
 ----
-
 
 == get_svcs.sh
 
@@ -62,10 +60,33 @@ Get a list of your ordered services (to get GUIDs)
 
 == retire_svcs.sh
 
-Retire **ALL** services that you own.  Be very careful that you actually want to do this.
+=== Purpose
+
+Immediately retire/delete **ALL** services that you own.  Be very careful that you actually want to do this.
+
+=== Username
+
+-u <text> If you do not provide a user name, you will be prompted for one.  
+
+=== Password
+
+-P <text> If you do not provide a password, you will be prompted for one.  
+
+=== URI
+
+-w <n> - Uri is the URI of your CloudForms/ManageIQ appliance.
+
+=== Insecure SSL
+
+-N allow insecure SSL.
+
+=== Non-Interactive
+
+Use -n if you don't want to be prompted if you are sure you wish to continue.  *Use at your own risk!*
 
 === Usage
 
 ----
 # retire_svcs.sh -c <catalog name> -i <item name> -u <username> [ -w <uri> ]
 ----
+
