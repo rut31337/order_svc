@@ -11,7 +11,7 @@ usage() {
   echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> [ -P <password> -w <uri> -n -N ]"
 }
 
-while getopts n:u:P:c:i:w: FLAG; do
+while getopts Nnu:P:c:i:w: FLAG; do
   case $FLAG in
     n) noni=1;;
     N) insecure=1;;
@@ -64,7 +64,7 @@ svcs=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -
 
 if [ "$noni" != 1 ]
 then
-  echo -n "Are you sure you wish to deploy $totalRequests instances of this catalog item? (y/N): ";read yn
+  echo -n "Are you sure you wish to retire/delte ALL services deployed from this catalog item? (y/N): ";read yn
   if [ "$yn" != "y" ]
   then
     echo "Exiting."
