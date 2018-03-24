@@ -8,12 +8,13 @@ uri="https://cf.example.com"
 # Dont touch from here on
 
 usage() {
-  echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> -N ]"
+  echo "Error: Usage $0 -c <catalog name> -i <item name> -u <username> -o <outfile> [ P <password> -w <uri> -N ]"
 }
 
-while getopts Nu:c:i:w:o: FLAG; do
+while getopts Nu:c:i:w:o:P: FLAG; do
   case $FLAG in
     u) username="$OPTARG";;
+    P) password="$OPTARG";;
     N) insecure=1;;
     c) catalogName="$OPTARG";;
     i) itemName="$OPTARG";;
@@ -34,11 +35,14 @@ then
   echo -n "Enter CF Username: ";read username
 fi
 
-echo -n "Enter CF Password: "
-stty -echo
-read password
-stty echo
-echo
+if [ -z "$password" ]
+then
+  echo -n "Enter CF Password: "
+  stty -echo
+  read password
+  stty echo
+  echo
+fi
 
 if [ "$insecure" == 1 ]
 then
