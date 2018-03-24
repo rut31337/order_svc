@@ -87,6 +87,6 @@ Use -n if you don't want to be prompted if you are sure you wish to continue.  *
 === Usage
 
 ----
-# retire_svcs.sh -c <catalog name> -i <item name> -u <username> [ -w <uri> ]
+# retire_svcs.sh -c <catalog name> -i <item name> -u <username> [ -w <uri> -n -N ]
 ----
 
