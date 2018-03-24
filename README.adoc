@@ -59,3 +59,13 @@ Get a list of your ordered services (to get GUIDs)
 ----
 # get_svcs.sh -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> ]
 ----
+
+== retire_svcs.sh
+
+Retire **ALL** services that you own.  Be very careful that you actually want to do this.
+
+=== Usage
+
+----
+# retire_svcs.sh -c <catalog name> -i <item name> -u <username> [ -w <uri> ]
+----
