@@ -1,4 +1,4 @@
-== ORDER_SVC
+== order_svc.sh
 
 === Purpose
 
@@ -52,10 +52,14 @@ Use -n if you don't want to be prompted if you are sure you wish to continue.  *
 
 Get a list of your ordered services (to get GUIDs)
 
+=== Insecure SSL
+
+-N allow insecure SSL.
+
 === Usage
 
 ----
-# get_svcs.sh -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> ]
+# get_svcs.sh -c <catalog name> -i <item name> -u <username> -o <outfile> [ -w <uri> -N ]
 ----
 
 == retire_svcs.sh
