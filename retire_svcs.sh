@@ -53,11 +53,29 @@ fi
 
 tok=`curl -s $ssl --user $username:$password -X GET -H "Accept: application/json" $uri/api/auth|python -m json.tool|grep auth_token|cut -f4 -d\"`
 
+if [ -z "$tok" ]
+then
+  echo "ERROR: Authentication failed to CloudForms."
+  exit 1
+fi
+
 catalogName=`echo $catalogName|sed "s/ /+/g"`
-itemName=`echo $itemName|sed "s/ /+/g"`
 catalogID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name%3D$catalogName" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+if [ -z "$catalogID" ]
+then
+  echo "ERROR: Invalid Catalog $catalogName"
+  exit 1
+fi
 echo "catalogID is $catalogID"
+
+
+itemName=`echo $itemName|sed "s/ /+/g"`
 itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name=$itemName&filter%5B%5D=service_template_catalog_id%3D$catalogID" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+if [ -z "$itemID" ]
+then
+  echo "ERROR: Invalid Catalog item $itemName"
+  exit 1
+fi
 echo "itemID is $itemID"
 
 svcs=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET $uri/api/services?attributes=href\&expand=resources\&filter%5B%5D=service_template_id%3D$itemID|python -m json.tool |grep '"href"'|grep "services/"|cut -f2- -d:|sed -e 's/[ |"|,]//g'`

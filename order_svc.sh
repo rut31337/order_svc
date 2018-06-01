@@ -73,12 +73,28 @@ then
 fi
 tok=`echo $tok|python -m json.tool|grep auth_token|cut -f4 -d\"`
 #echo "tok is '$tok'"
+if [ -z "$tok" ]
+then
+  echo "ERROR: Authentication failed to CloudForms."
+  exit 1
+fi
 
 catalogName=`echo $catalogName|sed "s/ /+/g"`
-itemName=`echo $itemName|sed "s/ /+/g"`
 catalogID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name%3D$catalogName" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+if [ -z "$catalogID" ]
+then
+  echo "ERROR: No such catalog $catalogName"
+  exit 1
+fi
 echo "catalogID is $catalogID"
+
+itemName=`echo $itemName|sed "s/ /+/g"`
 itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name=$itemName&filter%5B%5D=service_template_catalog_id%3D$catalogID" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,]//g"`
+if [ -z "$itemID" ]
+then
+  echo "ERROR: No such catalog item $itemName"
+  exit 1
+fi
 echo "itemID is $itemID"
 
 if [ "$noni" != 1 ]
