@@ -126,11 +126,17 @@ g=1
 while [ $t -le $totalRequests ]
 do
   c=1
-  tok=`curl -s $ssl --user $username:$password -X GET -H "Accept: application/json" $uri/api/auth|python -m json.tool|grep auth_token|cut -f4 -d\"`
   while [ $c -le $groupCount -a $t -le $totalRequests ]
   do
     echo "Deploying request $t in group $g"
-    out=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD" | python -m json.tool`
+    out=`curl -s $ssl --user $username:$password -H "Content-Type: application/json" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD"`
+    testerr=`echo $out|grep '{"error":'`
+    if [ -n "$testerr" ]
+    then
+      echo "Deployment Failed!"
+      echo $out | python -m json.tool
+      exit 1
+    fi
     (( c = $c + 1 ))
     (( t = $t + 1 ))
     sleep $apiWait
