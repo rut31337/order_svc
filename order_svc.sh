@@ -10,6 +10,8 @@ totalRequests=10 # Total number of requests
 groupCount=5 # Number to order at one time
 groupWait=1 # Minutes between groups
 apiWait=3 # Seconds between API calls in a group
+# Group to use, if empty group set in UI will be used by CF
+miqgroup=""
 
 # Dont touch from here on
 
@@ -80,7 +82,7 @@ then
 fi
 
 catalogName=`echo $catalogName|sed "s/ /+/g"`
-catalogID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name='$catalogName'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
+catalogID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -H "X-MIQ-Group: $miqgroup" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name='$catalogName'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
 if [ -z "$catalogID" ]
 then
   echo "ERROR: No such catalog $catalogName"
@@ -89,7 +91,7 @@ fi
 echo "catalogID is $catalogID"
 
 itemName=`echo $itemName|sed "s/ /+/g"`
-itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name='$itemName'&filter%5B%5D=service_template_catalog_id='$catalogID'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
+itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -H "X-MIQ-Group: $miqgroup" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name='$itemName'&filter%5B%5D=service_template_catalog_id='$catalogID'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
 if [ -z "$itemID" ]
 then
   echo "ERROR: No such catalog item $itemName"
@@ -129,7 +131,7 @@ do
   while [ $c -le $groupCount -a $t -le $totalRequests ]
   do
     echo "Deploying request $t in group $g"
-    out=`curl -s $ssl --user $username:$password -H "Content-Type: application/json" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD"`
+    out=`curl -s $ssl --user $username:$password -H "Content-Type: application/json" -H "X-MIQ-Group: $miqgroup" -X POST $uri/api/service_catalogs/$catalogID/service_templates -d "$PAYLOAD"`
     testerr=`echo $out|grep '{"error":'`
     if [ -n "$testerr" ]
     then
