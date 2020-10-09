@@ -82,6 +82,7 @@ then
 fi
 
 catalogName=`echo $catalogName|sed "s/ /+/g"`
+catalogName=`echo $catalogName|sed "s/&/%26/g"`
 catalogID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -H "X-MIQ-Group: $miqgroup" -X GET "$uri/api/service_catalogs?attributes=name,id&expand=resources&filter%5B%5D=name='$catalogName'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
 if [ -z "$catalogID" ]
 then
@@ -91,6 +92,7 @@ fi
 echo "catalogID is $catalogID"
 
 itemName=`echo $itemName|sed "s/ /+/g"`
+itemName=`echo $itemName|sed "s/&/%26/g"`
 itemID=`curl -s $ssl -H "X-Auth-Token: $tok" -H "Content-Type: application/json" -H "X-MIQ-Group: $miqgroup" -X GET "$uri/api/service_templates?attributes=service_template_catalog_id,id,name&expand=resources&filter%5B%5D=name='$itemName'&filter%5B%5D=service_template_catalog_id='$catalogID'" | python -m json.tool |grep '"id"' | cut -f2 -d:|sed "s/[ ,\"]//g"`
 if [ -z "$itemID" ]
 then
